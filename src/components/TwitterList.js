@@ -26,18 +26,20 @@ class TwitterList extends React.Component {
 
   handleSearch = _.debounce(e => {
     socket.emit('searchTerm', this.state.searchTerm);
-    console.log(`emitting search for: ${this.state.searchTerm}`);
+    console.log(`emitting new search for: ${this.state.searchTerm}`);
   }, 1000);
 
   componentDidMount() {
     socket.on('connect', () => {
-      console.log(`Tweet Socket connected, incoming tweets!`);
+      console.log(
+        `Socket connected, incoming new tweets for: ${this.state.searchTerm}`
+      );
       socket.on('tweets', data => {
         let list = [data].concat(this.state.results.slice(0, 15));
         this.setState({ results: list });
       });
     });
-    socket.on('Tweet Socket disconnected', () => {
+    socket.on('Socket disconnected', () => {
       socket.removeAllListeners('tweets');
       console.log('Socket Disconnected');
     });
