@@ -1,56 +1,62 @@
 import React from 'react';
 import socketIOClient from 'socket.io-client';
 import TwitterCard from './TwitterCard';
-import { Field, Input, Control } from 'bloomer';
+import { Field, Input, Control, Progress, Tag } from 'bloomer';
+
+import _ from 'lodash'; // debounce
+
+const socket = socketIOClient('http://localhost:3000/');
 
 class TwitterList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       results: [],
-      searchTerm: ''
+      searchTerm: '$MSFT'
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
   }
 
-  handleChange(e) {
-    this.setState({ searchTerm: e.target.value });
-  }
+  handleChange = async e => {
+    this.setState({ results: [] });
+    await this.setState({ searchTerm: e.target.value });
+    await this.handleSearch();
+  };
 
-  handleSearch() {
-    let term = this.state.searchTerm;
-    fetch('/setSearchTerm', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ term })
-    });
-  }
+  handleSearch = _.debounce(e => {
+    socket.emit('searchTerm', this.state.searchTerm);
+    console.log(`emitting search for: ${this.state.searchTerm}`);
+  }, 1000);
 
   componentDidMount() {
-    const socket = socketIOClient('http://localhost:3000/');
-
     socket.on('connect', () => {
-      console.log('Socket Connected');
+      console.log(`Tweet Socket connected, incoming tweets!`);
       socket.on('tweets', data => {
         let list = [data].concat(this.state.results.slice(0, 15));
         this.setState({ results: list });
       });
     });
-    socket.on('disconnect', () => {
+    socket.on('Tweet Socket disconnected', () => {
       socket.removeAllListeners('tweets');
       console.log('Socket Disconnected');
     });
   }
 
   render() {
-    let results = this.state.results;
+    const { results } = this.state;
 
+    let loading = <Progress isColor='info' max={100} />;
+    let counter = (
+      <Tag isPulled='right' isColor='info'>
+        <p>
+          <span className='blinking'>{results.length}</span> live tweets
+        </p>
+      </Tag>
+    );
     return (
       <div>
+        {counter}
         <Field>
           <Control>
             <Input
@@ -58,13 +64,14 @@ class TwitterList extends React.Component {
               type='text'
               placeholder='Search for...'
               onChange={this.handleChange}
+              value={this.state.searchTerm}
             />
           </Control>
         </Field>
 
-        {results.map((item, i) => (
-          <TwitterCard data={item} key={i} />
-        ))}
+        {results.length > 0
+          ? results.map((item, i) => <TwitterCard data={item} key={i} />)
+          : loading}
       </div>
     );
   }

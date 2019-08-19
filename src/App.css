@@ -1,3 +1,42 @@
 .blue {
   color: #00aced;
 }
+
+.cardfade-enter {
+  opacity: 0.01;
+}
+
+.cardfade-enter.cardfade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.cardfade-leave {
+  opacity: 1;
+}
+
+.cardfade-leave.cardfade-leave-active {
+  opacity: 0.01;
+  transition: opacity 100ms ease-in;
+}
+
+.blinking {
+  animation: blinkingText 1.3s infinite ease-in-out;
+}
+@keyframes blinkingText {
+  0% {
+    color: #fff;
+  }
+  49% {
+    color: transparent;
+  }
+  50% {
+    color: transparent;
+  }
+  99% {
+    color: transparent;
+  }
+  100% {
+    color: #fff;
+  }
+}

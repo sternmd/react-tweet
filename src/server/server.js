@@ -26,14 +26,15 @@ let twitter = new Twitter({
 let socketConnection;
 let twitterStream;
 
-app.locals.searchTerm = 'Javascript'; //Default search term for twitter stream.
+app.locals.searchTerm = '$MSFT'; //Default search term for twitter stream.
 app.locals.showRetweets = false; //Default
 
 /**
  * Resumes twitter stream.
  */
 const stream = () => {
-  console.log('Resuming for ' + app.locals.searchTerm);
+  console.log(`Searching for ${app.locals.searchTerm}`);
+
   twitter.stream(
     'statuses/filter',
     { track: app.locals.searchTerm },
@@ -51,22 +52,22 @@ const stream = () => {
   );
 };
 
-/**
- * Sets search term for twitter stream.
- */
-app.post('/setSearchTerm', (req, res) => {
-  let term = req.body.term;
-  app.locals.searchTerm = term;
-  twitterStream.destroy();
-  stream();
-});
-
-//Establishes socket connection.
+// Establishes socket connection.
 io.on('connection', socket => {
   socketConnection = socket;
   stream();
   socket.on('connection', () => console.log('Client connected'));
   socket.on('disconnect', () => console.log('Client disconnected'));
+});
+
+//
+io.on('connection', socket => {
+  socket.on('searchTerm', searchTerm => {
+    console.log(`Message received: ${searchTerm}`);
+    twitterStream.destroy();
+    app.locals.searchTerm = searchTerm;
+    stream();
+  });
 });
 
 /**
