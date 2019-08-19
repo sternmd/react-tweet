@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Container, Section, Columns, Column, Title, Subtitle } from 'bloomer';
+import { Container, Section, Columns, Column } from 'bloomer';
 import TwitterList from './components/TwitterList';
-import TwitterCard from './components/TwitterCard';
+import TwitterHeader from './components/TwitterHeader';
 
 class App extends Component {
   render() {
@@ -11,9 +11,7 @@ class App extends Component {
         <Container>
           <Columns>
             <Column isSize='1/2'>
-              <Title>Twitter Stream</Title>
-              <Subtitle>Search tweets in real-time!</Subtitle>
-
+              <TwitterHeader />
               <TwitterList />
             </Column>
           </Columns>

@@ -1,43 +1,53 @@
 import React from 'react';
 import socketIOClient from 'socket.io-client';
 import TwitterCard from './TwitterCard';
-import { Field, Label, Input, Control } from 'bloomer';
+import { Field, Input, Control } from 'bloomer';
 
 class TwitterList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tweets: [],
+      results: [],
       searchTerm: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   handleChange(e) {
     this.setState({ searchTerm: e.target.value });
-    console.log(this.state.searchTerm);
+  }
+
+  handleSearch() {
+    let term = this.state.searchTerm;
+    fetch('/setSearchTerm', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ term })
+    });
   }
 
   componentDidMount() {
-    const socket = socketIOClient('http://locahost:3000/');
+    const socket = socketIOClient('http://localhost:3000/');
 
     socket.on('connect', () => {
-      console.log(`socket connected`);
-      socket.on('data', data => {
-        console.log(data);
+      console.log('Socket Connected');
+      socket.on('tweets', data => {
+        let list = [data].concat(this.state.results.slice(0, 15));
+        this.setState({ results: list });
       });
     });
-
     socket.on('disconnect', () => {
-      socket.off('data');
-      socket.removeAllListeners('data');
-      console.log('socket disconnected');
+      socket.removeAllListeners('tweets');
+      console.log('Socket Disconnected');
     });
   }
 
   render() {
-    let tweets = this.state.tweets;
+    let results = this.state.results;
 
     return (
       <div>
@@ -51,7 +61,10 @@ class TwitterList extends React.Component {
             />
           </Control>
         </Field>
-        <TwitterCard />
+
+        {results.map((item, i) => (
+          <TwitterCard data={item} key={i} />
+        ))}
       </div>
     );
   }
