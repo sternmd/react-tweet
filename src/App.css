@@ -2,22 +2,22 @@
   color: #00aced;
 }
 
-.cardfade-enter {
+.fade-enter {
   opacity: 0.01;
 }
 
-.cardfade-enter.cardfade-enter-active {
+.fade-enter.fade-enter-active {
   opacity: 1;
   transition: opacity 500ms ease-in;
 }
 
-.cardfade-leave {
+.fade-leave {
   opacity: 1;
 }
 
-.cardfade-leave.cardfade-leave-active {
+.fade-leave.fade-leave-active {
   opacity: 0.01;
-  transition: opacity 100ms ease-in;
+  transition: opacity 300ms ease-in;
 }
 
 .blinking {
