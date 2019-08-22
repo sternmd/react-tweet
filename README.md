@@ -2,6 +2,8 @@
 
 # Twitter Search & Stream
 
+![](https://i.imgur.com/rcv19m1.gif)
+
 This app displays latest matching tweets (in real-time) based on the user's search input.
 
 ## Getting Started
