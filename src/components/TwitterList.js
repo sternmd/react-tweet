@@ -2,7 +2,6 @@ import React from 'react';
 import socketIOClient from 'socket.io-client';
 import TwitterCard from './TwitterCard';
 import { Field, Input, Control, Progress, Tag } from 'bloomer';
-
 import _ from 'lodash'; // debounce
 
 const socket = socketIOClient('http://localhost:3000/');

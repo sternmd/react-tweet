@@ -8,6 +8,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const io = require('socket.io')(server);
+io.set('origins', '*:*');
+
 const Twitter = require('twitter');
 
 // server setup
