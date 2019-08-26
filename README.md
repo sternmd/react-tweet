@@ -15,14 +15,12 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them:
 
 [Node.js](https://nodejs.org/en/)
+[Twitter API Keys](https://developer.twitter.com/) - Setup your credentials via .env file in root directory
 
 ### Installing
 
 ```bash
-# Install server dependencies
-npm install
-
-# Install client dependencies
+# Install server/client dependencies
 npm install
 
 # Locally run both Express server & React app from root

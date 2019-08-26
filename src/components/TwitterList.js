@@ -4,7 +4,7 @@ import TwitterCard from './TwitterCard';
 import { Field, Input, Control, Progress, Tag } from 'bloomer';
 import _ from 'lodash'; // debounce
 
-const socket = socketIOClient('http://localhost:3000/');
+const socket = socketIOClient();
 
 class TwitterList extends React.Component {
   constructor(props) {

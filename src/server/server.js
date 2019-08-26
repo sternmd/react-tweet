@@ -7,7 +7,7 @@ const server = require('http').createServer(app);
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const io = require('socket.io')(server);
+const io = require('socket.io').listen(server);
 io.set('origins', '*:*');
 
 const Twitter = require('twitter');
