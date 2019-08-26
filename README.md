@@ -14,8 +14,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them:
 
-[Node.js](https://nodejs.org/en/)
-[Twitter API Keys](https://developer.twitter.com/) - Setup your credentials via .env file in root directory
+- [Node.js](https://nodejs.org/en/)
+
+- [Twitter API Keys](https://developer.twitter.com/) - Setup your credentials via .env file in root directory
 
 ### Installing
 
